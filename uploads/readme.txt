@@ -1,0 +1,1 @@
+This folder will hold all the images that will be uploaded using the QR Code while attempting the exam.
