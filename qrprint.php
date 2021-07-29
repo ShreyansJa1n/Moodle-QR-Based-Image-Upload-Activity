@@ -14,7 +14,6 @@ $uniqueid=$dec[3];
 $num_str = sprintf("%06d", mt_rand(1, 999999));
 $DB->insert_record("randomnumber", ["ran_num"=>$num_str,"attemptid"=>$attemptid]);
 $encryption = base64_encode($num_str.'-'.$attemptid.'-'.$quesid.'-'.$slotid.'-'.$uniqueid);
-echo "<h2 class='center'>{$num_str}</h2>";
 echo "<img class='center' src ='https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=$url/mod/quiz/upload1.php?id={$encryption}'>";
 
 require_once('timeQR.php');

@@ -414,9 +414,12 @@ function FillAttachmentArray(e, readerEvt)
         <div class="row">
             <div class="col-md-12">
                 <ul>
-                    <li>Upload any number of pictures</li>
-                    <li>Tap on 'Capture' button to click photos of the answer</li>
-                    <li>After clicking, tap on submit button</li>
+                    <?php 
+                    require_once('upinstructions.php');
+                    foreach ($instructions as $instruction){
+                        echo "<li>$instruction</li>";
+                    }
+                    ?>
                 </ul>
             </div>
         </div>
