@@ -1,4 +1,11 @@
 <?php
+
+/**
+ * @package local_qrbasedimage
+ * @author Pearl Miglani <miglanipearl@gmail.com> and Shreyans Jain <shreyansja1n@outlook.com>
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
     require_once(__DIR__."/../../config.php");
     global $DB;
     include 'url.php';
@@ -10,15 +17,17 @@
     $qid = $dec[2];
     $sid = $dec[3];
     $uniqueid = $dec[4];
-    $check = $DB->record_exists_sql("SELECT attemptid FROM mdl_randomnumber where attemptid=$aid AND ran_num=$uid");
+    $check = $DB->record_exists('randomnumber',['attemptid'=>$aid,'ran_num'=>$uid]);
     require_once('timeQR.php');
-
     if ($check){
-        $tstamp = $DB->get_field_sql("SELECT tstamp FROM mdl_randomnumber WHERE attemptid=$aid AND ran_num=$uid ORDER BY tstamp DESC;");
-        date_default_timezone_set('Asia/Kolkata');
+        $tstamp = $DB->get_field('randomnumber','tstamp',['attemptid'=>$aid, 'ran_num'=>$uid]);
+        $tstamp = strtotime($tstamp);
+        $tstamp = date("Y-m-d H:i:s",$tstamp);
         $ctime = date("Y-m-d H:i:s", time());
         $diff = strtotime($ctime)-strtotime($tstamp);
-        if ($diff>90){
+        $timezone = date_default_timezone_get();
+
+        if ($diff>$time4qr){
             echo"
             <p id='box' style='text-align:center'></p>
             <script>alert('TIME EXPIRED');
@@ -271,24 +280,9 @@ jQuery(function ($) {
 }
 )
 
-//Apply the validation rules for attachments upload
 function ApplyFileValidationRules(readerEvt)
 {
-    //To check file type according to upload conditions
-    //if (CheckFileType(readerEvt.type) == false) {
-    //    alert("The file (" + readerEvt.name + ") does not match the upload conditions, You can only upload jpg/png/gif files");
-    //    e.preventDefault();
-    //    return;
-    //}
-
-    //To check file Size according to upload conditions
-    /*if (CheckFileSize(readerEvt.size) == false) {
-        alert("The file (" + readerEvt.name + ") does not match the upload conditions, The maximum file size for uploads should not exceed 300 KB");
-        e.preventDefault();
-        return;
-    }*/
-
-    //To check files count according to upload conditions
+   
     if (CheckFilesCount(AttachmentArray) == false) {
         if (!filesCounterAlertStatus) {
             filesCounterAlertStatus = true;
@@ -299,45 +293,14 @@ function ApplyFileValidationRules(readerEvt)
     }
 }
 
-//To check file type according to upload conditions
-/*function CheckFileType(fileType) {
-    if (fileType == "image/jpeg") {
-        return true;
-    }
-    else if (fileType == "image/png") {
-        return true;
-    }
-    else if (fileType == "image/gif") {
-        return true;
-    }
-    else {
-        return false;
-    }
-    return true;
-}*/
 
-//To check file Size according to upload conditions
-/*function CheckFileSize(fileSize) {
-    if (fileSize < 3000000) {
-        return true;
-    }
-    else {
-        return false;
-    }
-    return true;
-}*/
-
-//To check files count according to upload conditions
 function CheckFilesCount(AttachmentArray) {
-    //Since AttachmentArray.length return the next available index in the array, 
-    //I have used the loop to get the real length
     var len = 0;
     for (var i = 0; i < AttachmentArray.length; i++) {
         if (AttachmentArray[i] !== undefined) {
             len++;
         }
     }
-    //To check the length does not exceed 10 files maximum
     if (len > 9) {
         return false;
     }
@@ -347,7 +310,6 @@ function CheckFilesCount(AttachmentArray) {
     }
 }
 
-//Render attachments thumbnails.
 function RenderThumbnail(e, readerEvt)
 {
     var li = document.createElement('li');
@@ -355,15 +317,9 @@ function RenderThumbnail(e, readerEvt)
     li.innerHTML = ['<div class="img-wrap" style"padding-right:20px"> <span class="close">&times;</span>' +
         '<img class="thumb" src="', e.target.result, '" title="', escape(readerEvt.name), '" data-id="',
         readerEvt.name, '"/>' + '</div>'].join('');
-
-    // var div = document.createElement('div');
-    // div.className = "FileNameCaptionStyle";
-    // li.appendChild(div);
-    // div.innerHTML = [readerEvt.name].join('');
     document.getElementById('Filelist').insertBefore(ul, null);
 }
 
-//Fill the array of attachment
 function FillAttachmentArray(e, readerEvt)
 {
     AttachmentArray[arrCounter] =
@@ -389,7 +345,7 @@ function FillAttachmentArray(e, readerEvt)
         $("#re").removeClass('hidden');
         $("#result").remove();
         var enst= '<?php echo $_GET['id']; ?>';
-        $.ajax({method: "POST", url:url+"/mod/quiz/up.php", data:{files:AttachmentArray, id:enst}, error: function(jqXHR,  exception){
+        $.ajax({method: "POST", url:url+"/local/qrbasedimage/up.php", data:{files:AttachmentArray, id:enst}, error: function(jqXHR,  exception){
             alert(jqXHR.status);
         } }).done(function(returnedData){
             $("#container").append('<h3 id=result>'+returnedData+'</h3>');
@@ -436,7 +392,7 @@ function FillAttachmentArray(e, readerEvt)
         <div class="row justify-content-center align-items-center">
             <div class="col-md-12 text-center" style="margin-top: 62px;" id="subbutton"><button class="btn btn-primary text-center" onclick="onc()" type="button">Submit</button>
             <div id="re" class="hidden">
-                <img src="<?php include 'url.php'; echo $url;?>/mod/quiz/ajax-loader.gif">
+                <img src="<?php include 'url.php'; echo $url;?>/local/qrbasedimage/ajax-loader.gif">
             </div>
             <h3 id="result"></h3>
 

@@ -1,4 +1,11 @@
 <?php 
+
+/**
+ * @package local_qrbasedimage
+ * @author Pearl Miglani <miglanipearl@gmail.com> and Shreyans Jain <shreyansja1n@outlook.com>
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 require_once(__DIR__.'/../../config.php');
 include 'url.php';
 global $DB;
@@ -10,30 +17,12 @@ $dec = explode('-',$decryption);
 $aid=$dec[0];
 $slot=$dec[1];
 $qid=$dec[2];
-$images = $DB->get_records_sql("SELECT * FROM mdl_images WHERE attemptid=$aid and quesid=$qid and slot=$slot");
+$images =$DB->get_records('images', ['attemptid'=>$aid, 'quesid'=>$qid, 'slot'=>$slot],'','*');
 $x=0;
 if ($images){
     foreach ($images as $img){
-        echo '<script>
-        var modal = document.getElementById("myModal");
-        var img = document.getElementById("'."img$x".'");
-        var modalImg = document.getElementById("img01");
-        var captionText = document.getElementById("caption");
-        img.onclick = function(){
-          modal.style.display = "block";
-          modalImg.src = this.src;
-          captionText.innerHTML = "'."Image $x".'";
-        }
-        
-        var span = document.getElementsByClassName("close")[0];
-        
-        span.onclick = function() { 
-          modal.style.display = "none";
-        }
-        </script>';
-
         echo "<div id='image$x' >
-        <img src=$url/{$img->image} id='img$x' style='height:200px;padding-right:10px;padding-top:10px'></img>
+        <img src=$url{$img->image} id='img$x' style='height:200px;padding-right:10px;padding-top:10px'></img>
         <button class='btn btn-danger' onclick='deleteimage$x()' >Delete</button>
         </div>";
 
@@ -41,7 +30,7 @@ if ($images){
         function deleteimage$x(){
           if(confirm('Are you sure?')){
             $('#image$x').remove();
-            $.post('$url/mod/quiz/deleteimage.php',{id:'$img->image'});
+            $.post('$url/local/qrbasedimage/deleteimage.php',{id:'$img->image'});
 
           }
           else{
@@ -53,7 +42,7 @@ if ($images){
     }
 }
 else{
-    echo"No Images to display";
+    echo "No Images to display";
 }
 
 

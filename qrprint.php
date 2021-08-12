@@ -1,4 +1,11 @@
 <?php
+
+/**
+ * @package local_qrbasedimage
+ * @author Pearl Miglani <miglanipearl@gmail.com> and Shreyans Jain <shreyansja1n@outlook.com>
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 require_once(__DIR__."/../../config.php"); 
 global $DB;
 include 'url.php';
@@ -12,9 +19,10 @@ $slotid=$dec[1];
 $quesid=$dec[2];
 $uniqueid=$dec[3];
 $num_str = sprintf("%06d", mt_rand(1, 999999));
-$DB->insert_record("randomnumber", ["ran_num"=>$num_str,"attemptid"=>$attemptid]);
+$ctime = date("Y-m-d H:i:s", time());
+$DB->insert_record("randomnumber", ["ran_num"=>$num_str,"attemptid"=>$attemptid,"tstamp"=>$ctime]);
 $encryption = base64_encode($num_str.'-'.$attemptid.'-'.$quesid.'-'.$slotid.'-'.$uniqueid);
-echo "<img class='center' src ='https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=$url/mod/quiz/upload1.php?id={$encryption}'>";
+echo "<img class='center' src ='https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=$url/local/qrbasedimage/upload1.php?id={$encryption}' style='padding-top:10px'>";
 
 require_once('timeQR.php');
 

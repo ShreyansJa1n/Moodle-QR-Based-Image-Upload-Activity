@@ -1,4 +1,11 @@
 <?php
+
+/**
+ * @package local_qrbasedimage
+ * @author Pearl Miglani <miglanipearl@gmail.com> and Shreyans Jain <shreyansja1n@outlook.com>
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 require_once(__DIR__.'/../../config.php');
 global $DB;
 $hased=$_POST['id'];
@@ -9,13 +16,14 @@ $aid = $dec[1];
 $qid = $dec[2];
 $sid = $dec[3];
 $uniqueid = $dec[4];
-$tstamp = $DB->get_field_sql("SELECT tstamp FROM mdl_randomnumber WHERE attemptid=$aid AND ran_num=$uid ORDER BY tstamp DESC");
-date_default_timezone_set('Asia/Kolkata');
+$tstamp = $DB->get_field('randomnumber','tstamp',['attemptid'=>$aid, 'ran_num'=>$uid]);
 $ctime = date("Y-m-d H:i:s", time());
 $diff = strtotime($ctime)-strtotime($tstamp);
+
 require_once('timeQR.php');
 if ($diff>$time4qr){
     echo "QR Code has expired!";
+    echo ($diff);
 }
 else{
     $fi = $_POST['files'];
@@ -23,9 +31,9 @@ else{
         $fpath = md5("$uid-$aid-$sid-$x".uniqid()).".jpg";
         $decoded = base64_decode($fi[$x]['Content']);
         $image = imagecreatefromstring($decoded);
-        $rotate_image = imagerotate($image, 270, 0);
-        imagejpeg($rotate_image, __DIR__.'/uploads/'.$fpath, 70);
-        $DB->insert_record("images", ["name"=>$fpath, "image"=>"/mod/quiz/uploads/".$fpath,"ran_num"=>$uid,"attemptid"=>$aid,"quesid"=>$qid,"slot"=>$sid,"uniqueid"=>$uniqueid]);
+        // $rotate_image = imagerotate($image, 270, 0);
+        imagejpeg($image, __DIR__.'/uploads/'.$fpath, 70);
+        $DB->insert_record("images", ["name"=>$fpath, "image"=>"/local/qrbasedimage/uploads/".$fpath,"ran_num"=>$uid,"attemptid"=>$aid,"quesid"=>$qid,"slot"=>$sid,"uniqueid"=>$uniqueid]);
 
     }
     echo count($fi)." File(s) uploaded successfully";

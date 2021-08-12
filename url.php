@@ -1,3 +1,10 @@
 <?php 
-$url = "http://192.168.1.33:8888/moodle311";
+
+/**
+ * @package local_qrbasedimage
+ * @author Pearl Miglani <miglanipearl@gmail.com> and Shreyans Jain <shreyansja1n@outlook.com>
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+$url = "http://localhost:8888/moodle310";
 ?>

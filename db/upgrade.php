@@ -1,60 +1,33 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
-//
-// Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Moodle is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Upgrade script for the quiz module.
- *
- * @package    mod_quiz
- * @copyright  2006 Eloy Lafuente (stronk7)
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package local_qrbasedimage
+ * @author Pearl Miglani <miglanipearl@gmail.com> and Shreyans Jain <shreyansja1n@outlook.com>
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+    
+if ($oldversion < 2021081200) {
 
-defined('MOODLE_INTERNAL') || die();
 
-/**
- * Quiz module upgrade function.
- * @param string $oldversion the version we are upgrading from.
- */
-function xmldb_quiz_upgrade($oldversion) {
-    global $CFG, $DB;
-    $dbman = $DB->get_manager();
+        // Define table local_qrbasedimage to be created.
+        $table = new xmldb_table('local_qrbasedimage');
 
-    // Automatically generated Moodle v3.6.0 release upgrade line.
-    // Put any upgrade step following this.
+        // Adding fields to table local_qrbasedimage.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
 
-    // Automatically generated Moodle v3.7.0 release upgrade line.
-    // Put any upgrade step following this.
+        // Adding keys to table local_qrbasedimage.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
 
-    // Automatically generated Moodle v3.8.0 release upgrade line.
-    // Put any upgrade step following this.
-
-    // Automatically generated Moodle v3.9.0 release upgrade line.
-    // Put any upgrade step following this.
-
-    if ($oldversion < 2021072504) {
-
-        // Define field completionminattempts to be added to quiz.
-        $table = new xmldb_table('quiz');
-        $field = new xmldb_field('completionminattempts', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0',
-            'completionpass');
-
-        // Conditionally launch add field completionminattempts.
-        if (!$dbman->field_exists($table, $field)) {
-            $dbman->add_field($table, $field);
+        // Conditionally launch create table for local_qrbasedimage.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
         }
+
+        // Qrbasedimage savepoint reached.
+        upgrade_plugin_savepoint(true, 2021081200, 'local', 'qrbasedimage');
+    }
+
+
 
         // Define table randomnumber to be created.
         $table = new xmldb_table('randomnumber');
@@ -73,7 +46,11 @@ function xmldb_quiz_upgrade($oldversion) {
             $dbman->create_table($table);
         }
 
-                // Define table images to be created.
+        // Message savepoint reached.
+        upgrade_plugin_savepoint(true, 2021081200, 'local', 'qrbasedimage');
+
+
+        // Define table images to be created.
         $table = new xmldb_table('images');
 
         // Adding fields to table images.
@@ -88,27 +65,13 @@ function xmldb_quiz_upgrade($oldversion) {
         $table->add_field('slot', XMLDB_TYPE_INTEGER, '9', null, null, null, null);
 
         // Adding keys to table images.
-        $table->add_key('primarykey', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_key('pk', XMLDB_KEY_PRIMARY, ['id']);
 
         // Conditionally launch create table for images.
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
-        else{
-            $table = new xmldb_table('images');
-            $field = new xmldb_field('uniqueid', XMLDB_TYPE_INTEGER, '9', null, null, null, null, 'attemptid');
-            $dbman->add_field($table, $field);
-        }
 
-        // Quiz savepoint reached.
-        upgrade_mod_savepoint(true, 2021072504, 'quiz');
-    }
-
-    // Automatically generated Moodle v3.10.0 release upgrade line.
-    // Put any upgrade step following this.
-
-    // Automatically generated Moodle v3.11.0 release upgrade line.
-    // Put any upgrade step following this.
-
-    return true;
+        // Message savepoint reached.
+        upgrade_plugin_savepoint(true, 2021081200, 'local', 'qrbasedimage');
 }
