@@ -71,6 +71,8 @@ Install this plugin as a usual Moodle Plugin. Login as an Administrator on Moodl
 
 ### Note: This installation of the plugin will OVERWRITE  the files of the quiz folder (path: /mod/quiz/). It is recommended to take a backup of this folder in case anything goes wrong.
 
+### 🌟 There is also a newer version of the plugin available which does not overwrite or modify any exhisiting and core files of Moodle. It can be found in the another branch named :v2-no-core-mod 🌟
+
 After the installation, new files along with 2 new tables in the database should be created. Head over to the /mod/quiz/ folder and find the url.php file. Within this file, change the given url to your Moodle URL (eg: https://exam.niituniversity.in/).
 
 This will complete the installation of the plugin and now the changes can be seen in all ‘Essay’ type questions. 
