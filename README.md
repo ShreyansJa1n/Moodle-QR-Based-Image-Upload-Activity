@@ -1,6 +1,6 @@
 <img src = "https://edwiser.org/wp-content/uploads/2016/05/moodle-plugins.png" > </img>
 
-# Moodle QR Based Image Upload Activity
+# Moodle QR Based Image Upload Activity 🔌
 The QR Based Image Upload enables a student to upload images for questions which require hand-written answers or diagrams while attempting a quiz in Moodle even in the SEB(Safe Exam Browser) mode where the user does not have access to external websites, system functions or other applications while they are taking an assessment online. This plugin overwrites and updates the already existing quiz files which makes the setting up quiz process as usual as before. This plugin takes effect on all ‘Essay’ type questions. All essay type questions consist of a ‘Show QR’ button which when clicked, activates a unique link for 90 seconds. Within this timeframe, the student has to scan the QR through their smartphone/tablet and upload the images. If a student fails to do so, they can click on ‘Show QR’ again and a new link will be generated. The link generated everytime is dynamic and unique in nature and allows the user only to upload using the smartphone/tablet camera. It restricts uploading of images through any other means to prevent unfair means of upload. 
 
 This Moodle activity module was created as a collaborative effort between Pearl Miglani and Shreyans Jain as a project during internship at NIIT University.
@@ -70,6 +70,8 @@ Path to the file YOUR_MOODLE_DIR/mod/quiz/upinstructions.php
 Install this plugin as a usual Moodle Plugin. Login as an Administrator on Moodle then go to Site Administration then go to Plugin and install the plugin from there. The installation will create 2 tables in the database for the functionality to work with names ‘mdl_images’ and ‘mdl_randomnumber’.
 
 ### Note: This installation of the plugin will OVERWRITE  the files of the quiz folder (path: /mod/quiz/). It is recommended to take a backup of this folder in case anything goes wrong.
+
+### 🌟 There is also a newer version of the plugin available which does not overwrite or modify any existing and core files of Moodle. It can be found in the another branch named :v2-no-core-mod 🌟
 
 After the installation, new files along with 2 new tables in the database should be created. Head over to the /mod/quiz/ folder and find the url.php file. Within this file, change the given url to your Moodle URL (eg: https://exam.niituniversity.in/).
 
